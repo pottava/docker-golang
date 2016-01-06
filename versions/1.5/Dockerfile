@@ -1,5 +1,5 @@
-# Python 3.5.1
-# /usr/bin/python3.5 --version
+# Golang 1.5.2
+# /usr/bin/go version
 
 FROM alpine:3.3
 
