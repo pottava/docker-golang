@@ -3,10 +3,9 @@
 
 FROM alpine:3.3
 
-RUN apk --no-cache add go git
+RUN apk --no-cache add go git \
+   && mkdir -p /go/src /go/bin \
+   && chmod -R 777 /go
 
-RUN mkdir -p /go/src /go/bin && chmod -R 777 /go
-
-ENV GOPATH /go
-ENV PATH /go/bin:$PATH
+ENV GOPATH=/go PATH=/go/bin:$PATH
 WORKDIR /go
