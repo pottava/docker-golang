@@ -1,5 +1,5 @@
-# Golang 1.5.2
-# /usr/bin/go version
+# Golang v1.5.2
+# docker run --rm pottava/golang go version
 
 FROM alpine:3.3
 
