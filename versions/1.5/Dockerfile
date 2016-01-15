@@ -1,11 +1,4 @@
-# Golang v1.5.2
-# docker run --rm pottava/golang go version
+# Golang v1.5
 
-FROM alpine:3.3
-
-RUN apk --no-cache add go git \
-   && mkdir -p /go/src /go/bin \
-   && chmod -R 777 /go
-
-ENV GOPATH=/go PATH=/go/bin:$PATH
-WORKDIR /go
+FROM golang:1.5-alpine
+RUN apk --no-cache add git
