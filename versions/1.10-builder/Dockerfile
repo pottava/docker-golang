@@ -1,0 +1,38 @@
+# Golang v1.10 only with runtime & compiler
+
+FROM alpine:3.7
+
+ENV GOPATH=/go \
+    PATH=/go/bin:/usr/local/go/bin:$PATH
+
+WORKDIR /go/src
+
+RUN apk --no-cache add --virtual build-dependencies bash gcc musl-dev openssl go git \
+
+    # Install go 1.10
+    && GOLANG_VERSION=1.10.1 \
+    && GOLANG_SRC_URL=https://golang.org/dl/go$GOLANG_VERSION.src.tar.gz \
+    && GOLANG_SRC_SHA256=589449ff6c3ccbff1d391d4e7ab5bb5d5643a5a41a04c99315e55c16bbf73ddc \
+    && export GOROOT_BOOTSTRAP="$(go env GOROOT)" \
+    && wget -q "$GOLANG_SRC_URL" -O golang.tar.gz \
+    && echo "$GOLANG_SRC_SHA256  golang.tar.gz" | sha256sum -c - \
+    && tar -C /usr/local -xzf golang.tar.gz \
+    && cd /usr/local/go/src \
+    && ./make.bash \
+    && chmod -R 777 /go \
+
+    # Clean up
+    && find /usr/local/go -depth -type d -name test -exec rm -rf {} \; \
+    && find /usr/local/go -depth -type d -name testdata -exec rm -rf {} \; \
+    && find / -depth -type f -name *_test.go -exec rm -f {} \; \
+    && find / -depth -type f -name *README* -exec rm -f {} \; \
+    && rm -rf /usr/local/go/doc /usr/local/go/api /usr/local/go/misc/trace \
+        /go/src/* /var/cache/* /var/lib/apk* \
+    && apk del --purge -r build-dependencies \
+
+    # Remove tools
+    && cd /usr/local/go/pkg/tool/linux_amd64/ \
+    && rm -f [^acl]* a[^s]* cover \
+    && rm -f /usr/local/go/bin/gofmt
+
+CMD ["go", "version"]
