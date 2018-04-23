@@ -27,6 +27,10 @@ RUN apk --no-cache add --virtual build-dependencies bash gcc musl-dev openssl go
     && find / -depth -type f -name *_test.go -exec rm -f {} \; \
     && find / -depth -type f -name *README* -exec rm -f {} \; \
     && rm -rf /usr/local/go/doc /usr/local/go/api /usr/local/go/misc/trace \
+        /usr/local/go/pkg/linux_amd64/vendor \
+        /usr/local/go/pkg/linux_amd64/cmd/vendor \
+        /usr/local/go/src/cmd/vendor/ \
+        /usr/local/go/pkg/obj/go-build /usr/local/go/pkg/bootstrap \
         /go/src/* /var/cache/* /var/lib/apk* \
     && apk del --purge -r build-dependencies
 
