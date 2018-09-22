@@ -8,8 +8,8 @@ ENV GOPATH=/go \
 WORKDIR /go/src
 
 RUN apk --no-cache add --virtual build-dependencies bash gcc musl-dev openssl go git \
-
-    # Install go 1.11
+    && : \
+    && : Install go 1.11 \
     && GOLANG_VERSION=1.11 \
     && GOLANG_SRC_URL=https://golang.org/dl/go$GOLANG_VERSION.src.tar.gz \
     && GOLANG_SRC_SHA256=afc1e12f5fe49a471e3aae7d906c73e9d5b1fdd36d52d72652dde8f6250152fb \
@@ -20,18 +20,20 @@ RUN apk --no-cache add --virtual build-dependencies bash gcc musl-dev openssl go
     && cd /usr/local/go/src \
     && ./make.bash \
     && chmod -R 777 /go \
-
-    # Clean up
+    && : \
+    && : Clean up \
     && find /usr/local/go -depth -type d -name test -exec rm -rf {} \; \
     && find /usr/local/go -depth -type d -name testdata -exec rm -rf {} \; \
     && find / -depth -type f -name *_test.go -exec rm -f {} \; \
     && find / -depth -type f -name *README* -exec rm -f {} \; \
+    && find /usr/local/go -depth -type d -name vendor -exec rm -rf {} \; \
+    && find /usr/local/go -depth -type d -name go-build -exec rm -rf {} \; \
+    && apk del --purge -r build-dependencies \
     && rm -rf /usr/local/go/doc /usr/local/go/api /usr/local/go/misc/trace \
         /usr/local/go/pkg/linux_amd64/vendor \
         /usr/local/go/pkg/linux_amd64/cmd/vendor \
         /usr/local/go/src/cmd/vendor/ \
         /usr/local/go/pkg/obj/go-build /usr/local/go/pkg/bootstrap \
-        /go/src/* /var/cache/* /var/lib/apk* \
-    && apk del --purge -r build-dependencies
+        /go/src/* /root/.cache /var/cache/* /var/lib/apk*
 
 CMD ["go", "version"]
