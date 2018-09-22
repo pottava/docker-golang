@@ -1,6 +1,6 @@
 # Golang v1.10 only with runtime & compiler
 
-FROM alpine:3.7
+FROM alpine:3.8
 
 ENV GOPATH=/go \
     PATH=/go/bin:/usr/local/go/bin:$PATH
@@ -10,9 +10,9 @@ WORKDIR /go/src
 RUN apk --no-cache add --virtual build-dependencies bash gcc musl-dev openssl go git \
 
     # Install go 1.10
-    && GOLANG_VERSION=1.10.1 \
+    && GOLANG_VERSION=1.10.4 \
     && GOLANG_SRC_URL=https://golang.org/dl/go$GOLANG_VERSION.src.tar.gz \
-    && GOLANG_SRC_SHA256=589449ff6c3ccbff1d391d4e7ab5bb5d5643a5a41a04c99315e55c16bbf73ddc \
+    && GOLANG_SRC_SHA256=6fe44965ed453cd968a81988523e9b0e794d3a478f91fd7983c28763d52d5781 \
     && export GOROOT_BOOTSTRAP="$(go env GOROOT)" \
     && wget -q "$GOLANG_SRC_URL" -O golang.tar.gz \
     && echo "$GOLANG_SRC_SHA256  golang.tar.gz" | sha256sum -c - \
